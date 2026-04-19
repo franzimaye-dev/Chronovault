@@ -1,0 +1,32 @@
+# Node / React
+node_modules
+dist
+dist-ssr
+*.local
+.env
+
+# Rust / Tauri
+src-tauri/target
+src-tauri/gen
+src-tauri/*.log
+src-tauri/bin
+
+# Databases
+*.db
+*.sqlite
+!src-tauri/src/database/schema.sql
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS Files
+Thumbs.db
+desktop.ini

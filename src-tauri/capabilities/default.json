@@ -1,0 +1,15 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "default",
+  "description": "Hauptfenster-Berechtigungen für ChronoVault",
+  "windows": ["main"],
+  "permissions": [
+    "core:default",
+    "core:event:default",
+    "core:path:default",
+    "opener:default",
+    "dialog:default",
+    "core:webview:default",
+    "core:window:default"
+  ]
+}
