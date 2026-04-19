@@ -201,10 +201,21 @@ export function SettingsView() {
               </button>
               <button 
                 onClick={handlePickDir}
-                className="bg-cv-accent/20 border border-cv-accent/50 text-cv-accent-light px-4 py-2 font-bold text-xs uppercase tracking-wider hover:bg-cv-accent/40 transition-colors"
-                title="Browse folder"
+                className="bg-cv-accent/10 border border-cv-accent/30 text-cv-accent-light px-4 py-2 font-bold text-xs uppercase tracking-wider hover:bg-cv-accent/30 transition-colors"
+                title={t.addFolder}
               >
-                {t.browse}
+                {t.addFolder}
+              </button>
+              <button 
+                onClick={async () => {
+                   const { pickAndAddFile } = await import('../../lib/tauri');
+                   const added = await pickAndAddFile();
+                   if (added) loadDirs();
+                }}
+                className="bg-cv-info/10 border border-cv-info/30 text-cv-info px-4 py-2 font-bold text-xs uppercase tracking-wider hover:bg-cv-info/30 transition-colors"
+                title={t.addFile}
+              >
+                {t.addFile}
               </button>
             </div>
 

@@ -54,7 +54,7 @@ export const translations = {
     watchedPaths: 'Überwachte Pfade',
     aiCenter: 'KI-Zentrum',
     databaseInfo: 'Datenbank & Speicher',
-    fullReindex: 'Full System Re-Index',
+    fullReindex: 'Tiefen-Indexierung starten',
     theme: 'Erscheinungsbild',
     language: 'Sprache',
     status: 'Status',
@@ -62,6 +62,8 @@ export const translations = {
     pathPlaceholder: 'Manueller Pfad...',
     add: 'Hinzufügen',
     browse: 'Durchsuchen',
+    addFolder: 'Ordner wählen',
+    addFile: 'Datei wählen',
 
     // Onboarding
     welcome: 'Willkommen bei ChronoVault',
@@ -122,7 +124,7 @@ export const translations = {
     watchedPaths: 'Watched Paths',
     aiCenter: 'AI Center',
     databaseInfo: 'Database & Storage',
-    fullReindex: 'Full System Re-Index',
+    fullReindex: 'Start Deep Indexing',
     theme: 'Appearance',
     language: 'Language',
     status: 'Status',
@@ -130,6 +132,8 @@ export const translations = {
     pathPlaceholder: 'Manual path...',
     add: 'Add',
     browse: 'Browse',
+    addFolder: 'Add Folder',
+    addFile: 'Add File',
 
     // Onboarding
     welcome: 'Welcome to ChronoVault',

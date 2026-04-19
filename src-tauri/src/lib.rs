@@ -62,6 +62,7 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![
             commands::files::list_directory,
             commands::files::get_timeline_data,
+            commands::files::get_all_files,
             commands::files::get_file_metadata,
             commands::files::search_files,
             commands::files::get_watched_directories,

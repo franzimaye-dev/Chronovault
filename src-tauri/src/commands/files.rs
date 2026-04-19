@@ -238,6 +238,39 @@ pub async fn get_timeline_data(state: tauri::State<'_, AppState>) -> Result<Vec<
     Ok(clusters)
 }
 
+/// Gibt alle indexierten Dateien aus der Datenbank zurück.
+#[tauri::command]
+pub async fn get_all_files(state: tauri::State<'_, AppState>) -> Result<Vec<FileEntry>, String> {
+    let db = state.db.lock().await;
+    let mut stmt = db.conn.prepare("
+        SELECT name, path, extension, size, is_dir, created_at, modified_at, category FROM files
+        ORDER BY modified_at DESC
+    ").map_err(|e| format!("Fehler beim Vorbereiten der Abfrage: {}", e))?;
+
+    let rows = stmt.query_map([], |row| {
+        Ok(FileEntry {
+            name: row.get(0)?,
+            path: row.get(1)?,
+            extension: row.get(2)?,
+            size: row.get(3)?,
+            is_dir: row.get(4)?,
+            created_at: row.get(5)?,
+            modified_at: row.get(6)?,
+            category: row.get(7)?,
+            relevance: None,
+        })
+    }).map_err(|e| format!("Fehler beim Ausführen der Abfrage: {}", e))?;
+
+    let mut results = Vec::new();
+    for row in rows {
+        if let Ok(entry) = row {
+            results.push(entry);
+        }
+    }
+
+    Ok(results)
+}
+
 /// Gibt Metadaten einer einzelnen Datei zurück.
 #[tauri::command]
 pub async fn get_file_metadata(path: String) -> Result<FileEntry, String> {

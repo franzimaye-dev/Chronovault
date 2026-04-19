@@ -81,6 +81,8 @@ export function GraphView() {
   const [selectedFile, setSelectedFile] = useState<FileEntry | null>(null);
   const [summary, setSummary] = useState<string | null>(null);
   const [isSummarizing, setIsSummarizing] = useState(false);
+  const [showRecursive, setShowRecursive] = useState(false);
+  const [recursiveFiles, setRecursiveFiles] = useState<FileEntry[]>([]);
 
   useEffect(() => {
     if (clusters.length === 0 && !isLoading) {
@@ -126,7 +128,37 @@ export function GraphView() {
     );
   }, [minMatch, setEdges]);
 
-  const allFiles = useMemo(() => clusters.flatMap(c => c.files), [clusters]);
+  // Fetch all files for recursive mode
+  useEffect(() => {
+    if (showRecursive) {
+      import('../../lib/tauri').then(({ getAllFiles }) => {
+        getAllFiles().then(setRecursiveFiles).catch(console.error);
+      });
+    }
+  }, [showRecursive]);
+
+  const { searchResults } = useUIStore();
+
+  const allFiles = useMemo(() => {
+    let baseFiles: FileEntry[] = [];
+    if (showRecursive) {
+      baseFiles = recursiveFiles;
+    } else {
+      baseFiles = clusters.flatMap(c => c.files);
+    }
+
+    if (searchQuery && searchResults.length > 0) {
+      const combined = [...baseFiles];
+      searchResults.forEach(res => {
+        if (!baseFiles.some(f => f.path === res.path)) {
+          combined.push(res);
+        }
+      });
+      return combined;
+    }
+
+    return baseFiles;
+  }, [clusters, showRecursive, recursiveFiles, searchQuery, searchResults]);
 
   /**
    * Orchestrates the visual layout based on the active mode (Semantic, Timeline, or Category).
@@ -492,6 +524,23 @@ export function GraphView() {
           </p>
 
           <div className="space-y-4">
+            {/* Recursive Toggle */}
+            <div className="flex items-center justify-between p-3 bg-cv-bg-tertiary/30 border border-cv-border-subtle rounded-sm">
+                <div className="flex flex-col">
+                    <span className="text-[9px] font-black text-white uppercase tracking-wider">Recursive</span>
+                    <span className="text-[7px] text-cv-text-muted uppercase">Deep Scan</span>
+                </div>
+                <button 
+                    onClick={() => setShowRecursive(!showRecursive)}
+                    className={`w-10 h-5 rounded-full relative transition-colors ${showRecursive ? 'bg-cv-accent shadow-[0_0_10px_rgba(139,92,246,0.3)]' : 'bg-cv-bg-secondary border border-cv-border-subtle'}`}
+                >
+                    <motion.div 
+                        animate={{ x: showRecursive ? 22 : 2 }}
+                        className="absolute top-1 w-3 h-3 bg-white rounded-full shadow-sm"
+                    />
+                </button>
+            </div>
+
             <div className="flex flex-col gap-1.5">
                <div className="flex justify-between text-[9px] font-black uppercase tracking-tighter">
                   <span className="text-cv-text-muted">Sensitivity</span>

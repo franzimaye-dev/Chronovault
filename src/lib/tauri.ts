@@ -22,6 +22,11 @@ export async function getFileMetadata(path: string): Promise<FileEntry> {
   return invoke<FileEntry>('get_file_metadata', { path });
 }
 
+/** Gibt alle indexierten Dateien zurück. */
+export async function getAllFiles(): Promise<FileEntry[]> {
+  return invoke<FileEntry[]>('get_all_files');
+}
+
 /** Einfache Text-Suche über Dateinamen. */
 export async function searchFiles(query: string): Promise<FileEntry[]> {
   return invoke<FileEntry[]>('search_files', { query });
@@ -57,6 +62,20 @@ export async function pickAndAddDirectory(): Promise<string | null> {
   return null;
 }
 
+/** Öffnet einen nativen Datei-Picker und fügt die gewählte Datei hinzu. */
+export async function pickAndAddFile(): Promise<string | null> {
+  const selected = await open({
+    directory: false,
+    multiple: false,
+    title: 'Datei zur Überwachung auswählen'
+  });
+  
+  if (selected && typeof selected === 'string') {
+    await addWatchedDirectory(selected);
+    return selected;
+  }
+  return null;
+}
 // ─── AI Commands ───────────────────────────────────────────────────
 
 /** Führt eine semantische Ähnlichkeitssuche mit Ollama und sqlite-vec durch. */
